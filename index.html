@@ -11,12 +11,13 @@
   <title>BDC Academy: Short introduction to D3.js</title>
 
   <link rel="stylesheet" type="text/css" href="style.css" />
+  <script defer src="js/d3-chart.js"></script>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root">
-    <!-- We start by defining a svg container element.
+    <!-- We start by defining an svg container element.
     -  an svg element inside the div#root
     -  a 'version' 1.1 and a xml namespace 'xmlns' attribute on the svg element. 
     -  a width and height to make it a square of 400 by 400 (pixels)
@@ -27,7 +28,7 @@
     Note2: if you don't supply a width and height to the SVG container, a default of 300 x 150 (pixels) will be used in all browsers. 
     Note3: Note: In the most basic case one pixel in an SVG document maps to one pixel on the output device (a.k.a. the screen). One user unit equals one screen unit.
   -->
-    <svg class="my-graphic" version="1.1" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+    <svg id="svg-chart" class="my-graphic" version="1.1" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
       <!-- viewBox="100 100 200 200" -->
 
 
@@ -198,7 +199,8 @@
 
       <!-- <g id="y-axis"> -->
       <line x1="80" x2="80" y1="350" y2="50" stroke="red" stroke-width="2" />
-      <g transform="translate(75, 0)" text-anchor="end" font-size="14" fill="red" font-style="bold" dominant-baseline="middle">
+      <g transform="translate(75, 0)" text-anchor="end" font-size="14" fill="red" font-style="bold"
+        dominant-baseline="middle">
         <text y="350">0</text>
         <text y="320">10</text>
         <text y="290">20</text>
@@ -212,28 +214,9 @@
         <text y="50">100</text>
       </g>
       <!-- </g> -->
+    </svg>
 
-      <!-- TODO: Extra some fun with zooming, a little bit on the viewBox attribute
-        svg is called scalable for a good reason. SVG maps it's relative sizing units (a.k.a. pixels) to the screen units. 
-        Default this would mean 1 svg pixel is 1 screen pixel, but screens are in control here.
-        As an example of this, open the two files located in the _assignment folder 'thisdoesnotscale.png' and 'thisdoesscale.svg' in chrome
-        and zoom in on both images. You will see the png getting blurry while the svg stays crisp. 
-        This is because the png literally maps to a screen pixel 1 on 1, but the svg lets the screen decide what a pixel is and scales accordingly.
-       
-        Besides zooming in on the whole graphic, we are also able to zoom in on a specific part of the svg using an attribute called viewBox.
-        The viewBox attribute consist of 4 parts: viewBox="x y width height". 
-        The default value is the top left and width/height of the svg. In our case the default is viewBox="0 0 400 400"
-        To zoom in say 2x, we can change the viewBox width/height to 200. 
-        If we keep x and y at 0 we will effectively zoom in on the top left of the svg.
-        If we want to zoom in on the center of the svg, we can use some math to calculate what x and y must be: 
-        take the original width/height minus the viewBox width/height and divide by 2 to get the viewBox x/y that centers our zoom.
-        So, to zoom in 2x on the center of our svg we have the viewBox="100 100 200 200"
-        - Let's try and zoom in on our text by adding this 2x viewBox to our svg.
-
-        Note: in my experience, it is a bit tricky to understand the workings of the viewBox attribute. 
-        Besides that it works in tandem with another attribute called preserveAspectRatio, which we will not go into further now.
-        To really get a graps of these attributes, you probably need to spend some late hours on it, getting more and more frustrated about it until the eureka moment occurs :)
-      -->
+    <svg id="d3-chart" class="my-graphic" version="1.1" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
     </svg>
   </div>
 </body>
