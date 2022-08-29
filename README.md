@@ -1,0 +1,32 @@
+## Short introduction to D3.js
+
+Duration: 4h
+Difficulty: Intermediate
+
+D3.js is the undefeated champion when it comes to building visualisations using web technologies. D3.js enables you to 'bind' data to the Document Object Model (DOM) and make data driven changes to it. This training is a short introduction to the basics of D3.js.
+
+**Course content**
+D3.js is almost always used in combination with SVG because of its, well, scalability. 
+That is why we will first look at some of the basics of SVG and use it to create a simple barchart.
+After that, we will look at some of the basics of D3.js and use it to create ...a simple barchart... ;)
+
+**What you will learn**
+- SVG basics: basic shapes, attributes, coordinate system, text, drawing paths
+- D3.js basics: elements, attributes, basic shapes, chaining-syntax, selections, basic data binding
+ 
+**requirements**
+- Laptop with Visual Studio Code installed
+  - VS Code extensions installed: Live Server, Todo Tree
+- Materials will be made available via Github and can be cloned via git or downloaded in a zip
+- Good understanding of HTML, CSS and JavaScript fundamentals
+
+## Materials
+
+- svg-grid png
+- does(not)scale png/svg
+- d3 data viz process png
+- selections png's 
+- joining data and elements png's
+
+## Links
+[https://www.fusioncharts.com/blog/bar-charts-or-column-charts/](https://www.fusioncharts.com/blog/bar-charts-or-column-charts/)

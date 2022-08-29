@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  font-family: 'Roboto', 'Oxygen', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+
+}
+
+.my-graphic {
+  display: block;
+  margin: 40px auto;
+  border: 1px solid #eee;
+}
+
+/* #static-chart rect {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: enter-rect 1s forwards;
+
+}
+
+@keyframes enter-rect {
+  0% {
+    transform: scaleY(0);
+  }
+
+  100% {
+    transform: scaleY(1);
+  }
+} */

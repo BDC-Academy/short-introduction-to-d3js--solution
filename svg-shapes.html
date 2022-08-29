@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <!-- <link rel="icon" href="favicon.svg" type="image/svg+xml"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="BDC Academy: short introduction D3.js" />
+  <title>BDC Academy: Short introduction to D3.js</title>
+
+  <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root">
+    <!-- We start by defining a svg container element.
+    -  an svg element inside the div#root
+    -  a 'version' 1.1 and a xml namespace 'xmlns' attribute on the svg element. 
+    -  a width and height to make it a square of 400 by 400 (pixels)
+    -  a class 'my-graphic'. The style.css is used to make the svg a block element and center in on screen with display: block; margin: 0 auto;
+
+    TIP: it is a good idea to see what you have created in the browser after every step and use inspect element to examine the DOM.
+    Note: version and namespace attributes are optional when using a 'inline' SVG like we are doing now.
+    Note2: if you don't supply a width and height to the SVG container, a default of 300 x 150 (pixels) will be used in all browsers. 
+    Note3: Note: In the most basic case one pixel in an SVG document maps to one pixel on the output device (a.k.a. the screen). One user unit equals one screen unit.
+  -->
+    <svg class="my-graphic" version="1.1" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+
+
+      <!-- TODO: 1. creating elements and defining their width and height
+        A rect element can be used to draw, you guessed it, rectangles.
+          - create a rect element with a 'width' attribute of 20 and a 'height' attribute of 300 (pixels)
+          - give the rect a color #294899 using the 'fill' attribute
+      -->
+
+      <!-- TODO: 2. positioning different elements on the grid
+        Positioning basically works by providing x and y coordinates that the element should start and sometimes end at.
+        x determines the position left to right where 0 is to the far left, and y determines the position from top to bottom where 0 is the absolute top.
+        Where the drawing of an element begins however, depends on the 'basic shape' you are using (rect, circle, line, etc.)
+        
+        Rects are drawn from the top left, so to calculate where the bottom right will be,
+        you need to add the x and y position to the width and height. 
+        For example, if you have a rect width 100 and height 200 and x=20 and y=40, 
+        the top left will be at position x 20 and y 40 and the bottom right will be at x 20 + 100 and y 40 + 200
+          - calculate the x and y if you want to position the rect exactly in the middle of svg
+          - position the rect almost (50 px) at the bottom center of the svg with the x and y attributes
+          - add four more rects width the same width and a different height and position them to the left of the existing one. Put 5 pixels between each rect
+          - are your bars hanging from the ceiling by any change? Remember y position 0 is at the top of the svg. 
+      -->
+      <!-- TODO: 3. adding a line element
+        You should have five vertical bars next to eachother by now, lets add a line element to it.
+        The line element draws a straight line from point a to point b. The starting point a has an x and y position as does the ending point b
+          - create a line element and define its starting point a with x1 and y1. Set the starting point exactly at the bottom left of your first rectangle
+          - define point b where the line should end with x2 and y2. Set the end of the line exactly at the bottom right of your last rectangle
+          - inspect the DOM and wonder why your line is not showing :)
+       -->
+
+      <!-- TODO: 4. adding borders to our elements
+         Elements can be surrounded by borders like in html, with the 'stroke' attribute.
+         Stroke is more useful than just for adding a border, it is actually needed to draw lines and paths.
+         As we just saw, the line itself is not visible as it has no 'height' and no attribute for it. We need to add a stroke to it, to make it show up.
+          - add a 'stroke' attribute to the line element. The 'stroke' determines the color, use red as value
+          - add a 'stroke-width' attribute to the line element with which you can determine the size of the line (default 1). set it to 2.
+          - are your bars now standing on top of the line? They should so fix it if they are not ;)
+          - create another line, this time make it vertical, 300px long and and position it exactly to the left of our first rectangle
+          - the lines should be sort of 'connecting', if they our not fix it.
+          - imagine our red lines being an horizontal (x) and a vertical (y) axis.
+            To make it look a little bit more appealing, add 10 pixels to the the left and right of the x axis (10 px is half a bar) and
+            connect the vertical line to the horizontal again.
+
+        Of course, we can also give our rectangle a border with the stroke attribute. 
+        Remember, a stroke will draw AROUND the border lines of a shape. Find out what that means for the rect:
+          - Add a 'border' to the middle rect with the 'stroke' and 'stroke-width' attributes. use the color green and stroke-width 5 (pixels)
+          - Compare the size of the rects, what changed?
+          - remove the border again. Instead, to make a certain bar stand out because it is important, make the rectangle itself green
+         -->
+
+      <!-- TODO: 5. adding text to the equation 
+        Text element can also be positioned with the x and y attributes, colored with the 'fill' attribute and can even have a border with the 'stroke' attribute.
+        You can further manipulate the appearance of the text with attributes similar to those of HTML/CSS,
+        like font-size, font-style, font-weight and font-family.
+        Positioning the text with x and y determines the STARTING point (top left) of the text.
+        Positioning the text element in the center of the svg will not display the text exactly in the middle, because the x and y position are used as STARTING point. 
+        The text can be aligned however, by setting the 'text-anchor' attribute to start, middle or end with a default of start.
+        text-anchor alignes the text horizontal and the 'dominant-baseline' attribute alignes it vertical with auto, middle and hanging as its most used values.
+          - create a text element with the text 'ma'. The actual text is defined as a child of the text element.
+          - use the 'fill', 'font-style' and 'font-size' attributes to give the text a color, make it bold and size 14
+          - position the text exactly on the horizontal line and beneath our first bar
+          - the text should now be 'standing' on top op of the horizontal line. Use the 'dominant-baseline' attribute to align the text so it is 'hanging' beneath the line
+          - create a text element for each bar di, wo, do, vr and position them beneath the right bar
+        -->
+
+      <!-- TODO: 6. use a group to move all our text elements 
+        Our text elements are NOT perfectly positioned (if you did it right ;)).
+        We could manipulate every element separately to make them position perfectly, but it is way nicer if we could do it al at once.
+        Well, we can! With a svg group element g. A group element does not represent a visual entity in svg. It only groups other elements.
+        You can't give a group element a height, width, x or y but you can use other attributes that are inherited by its child element.
+        Even though you can't position a g element, you can 'transform' the whole group just like in CSS.
+        - add a g element and move the text elements inside it so they become child elements
+        - add a 'transform' attribute to the g element with the value 'translate(10, 0)'. This will push the whole group 10px to the right
+        - now all text elements START exactly in the middle of each bar, but to actually center them beneath the bars we need to set text-anchor to middle on each of them
+          luckily, we can just do this by setting it on the group element and all the text elements will inherit this property
+        - you can move all the properties that are the same for each text element to the group element. Come on! Do it!! Do it now!!!
+      -->
+
+      <!-- TODO: 7. now add the vertical y axis
+        We're almost done with our static svg column chart but we still need values on our y-axis.
+        It should have eleven text elements starting with 0 at the exact bottom of the vertical line and 100 at the exact top.
+        The text elements should be positioned slightly to the left of the vertical line
+        and evenly distributed along the length of the line. See if you can manage all this without me telling you the steps to take ;)  
+      -->
+
+      <!-- TODO Extra: group all the things! 
+        Now that you saw the power and use of the svg group element, do you see more elements that could be in a group?
+        Note: groups can also be nested inside groups, inside groups, inside groups... inception
+        Note2: using transform translate can also make calculating x and y values easier, for example when drawing the rects/columns
+      -->
+
+      <!-- TODO Extra: add 'value tooltips' and display the bar values as a text element
+        It's hard to read what value each column is. Let's add some text elements that display the exact value of each bar.
+        Place each bar value 'inside' (on top of) the bars and color them white for readability.
+       -->
+
+      <!-- TODO Extra: add gridlines to make it even more clear
+        You can also add horizontal lines, usually dotted, that originate at each value / tick on the y-axis to make the bars more readable.
+        Usually gridlines or exact values are used in a column chart, sometimes both. 
+        It depends on what insight is most important, the exact value or the relative size of each bar. 
+        Well, what are you waiting for. Go create some gridlines.
+        -->
+
+      <g id="gridlines" transform="translate(80, 0)" stroke="#ccc" stroke-width="1" stroke-dasharray="4 1">
+        <line x1="0" x2="140" y1="320" y2="320"  />
+        <line x1="0" x2="140" y1="290" y2="290" />
+        <line x1="0" x2="140" y1="260" y2="260" />
+        <line x1="0" x2="140" y1="230" y2="230" />
+        <line x1="0" x2="140" y1="200" y2="200" />
+        <line x1="0" x2="140" y1="170" y2="170" />
+        <line x1="0" x2="140" y1="140" y2="140" />
+        <line x1="0" x2="140" y1="110" y2="110" />
+        <line x1="0" x2="140" y1="80" y2="80"   />
+        <line x1="0" x2="140" y1="50" y2="50"   />
+      </g>
+
+      <!-- <rect width="20" height="100" fill="#294899" x="90" y="250" />
+      <rect width="20" height="150" fill="#294899" x="115" y="200" />
+      <rect width="20" height="200" fill="green" x="140" y="150" />
+      <rect width="20" height="250" fill="#294899" x="165" y="100" />
+      <rect width="20" height="300" fill="#294899" x="190" y="50" /> -->
+
+      <g id="content" fill="#294899" transform="translate(90, 250)" font-size="14" font-style="bold"
+        text-anchor="middle" dominant-baseline="hanging">
+        <g>
+          <rect width="20" height="100" x="0" y="0" />
+          <text y="0" x="10" fill="white">33</text>
+        </g>
+        <g>
+          <rect width="20" height="150" x="25" y="-50" />
+          <text y="-50" x="35" fill="white">50</text>
+        </g>
+        <g>
+          <rect width="20" height="200" fill="green" x="50" y="-100" />
+          <text y="-100" x="60" fill="white">66</text>
+        </g>
+        <g>
+          <rect width="20" height="250" x="75" y="-150" />
+          <text y="-150" x="85" fill="white">83</text>
+        </g>
+        <g>
+          <rect width="20" height="300" x="100" y="-200" />
+          <text y="-200" x="110" fill="white">100</text>
+        </g>
+
+        <!-- <g transform="translate(0, 90)" dominant-baseline="auto">
+          <text x="10" fill="white">33</text>
+          <text x="35" fill="white">50</text>
+          <text x="60" fill="white">66</text>
+          <text x="85" fill="white">83</text>
+          <text x="110" fill="white">100</text>
+        </g> -->
+      </g>
+
+      <!-- <g id="x-axis"> -->
+      <line x1="80" x2="220" y1="350" y2="350" stroke="red" stroke-width="2" />
+      <g transform="translate(10, 4)" font-size="14" fill="red" font-style="bold" text-anchor="middle"
+        dominant-baseline="hanging">
+        <text y="350" x="90">ma</text>
+        <text y="350" x="115">di</text>
+        <text y="350" x="140">wo</text>
+        <text y="350" x="165">do</text>
+        <text y="350" x="190">vr</text>
+      </g>
+      <!-- </g> -->
+
+      <!-- <g id="y-axis"> -->
+      <line x1="80" x2="80" y1="350" y2="50" stroke="red" stroke-width="2" />
+      <g transform="translate(75, 0)" text-anchor="end" font-size="14" fill="red" font-style="bold" dominant-baseline="middle">
+        <text y="350">0</text>
+        <text y="320">10</text>
+        <text y="290">20</text>
+        <text y="260">30</text>
+        <text y="230">40</text>
+        <text y="200">50</text>
+        <text y="170">60</text>
+        <text y="140">70</text>
+        <text y="110">80</text>
+        <text y="80">90</text>
+        <text y="50">100</text>
+      </g>
+      <!-- </g> -->
+
+      <!-- TODO: Extra some fun with zooming, a little bit on the viewBox attribute
+        svg is called scalable for a good reason. SVG maps it's relative sizing units (a.k.a. pixels) to the screen units. 
+        Default this would mean 1 svg pixel is 1 screen pixel, but screens are in control here.
+        As an example of this, open the two files located in the _assignment folder 'thisdoesnotscale.png' and 'thisdoesscale.svg' in chrome
+        and zoom in on both images. You will see the png getting blurry while the svg stays crisp. 
+        This is because the png literally maps to a screen pixel 1 on 1, but the svg lets the screen decide what a pixel is and scales accordingly.
+       
+        Besides zooming in on the whole graphic, we are also able to zoom in on a specific part of the svg using an attribute called viewBox.
+        The viewBox attribute consist of 4 parts: viewBox="x y width height". 
+        The default value is the top left and width/height of the svg. In our case the default is viewBox="0 0 400 400"
+        To zoom in say 2x, we can change the viewBox width/height to 200. 
+        If we keep x and y at 0 we will effectively zoom in on the top left of the svg.
+        If we want to zoom in on the center of the svg, we can use some math to calculate what x and y must be: 
+        take the original width/height minus the viewBox width/height and divide by 2 to get the viewBox x/y that centers our zoom.
+        So, to zoom in 2x on the center of our svg we have the viewBox="100 100 200 200"
+        - Let's try and zoom in on our text by adding this 2x viewBox to our svg.
+
+        Note: in my experience, it is a bit tricky to understand the workings of the viewBox attribute. 
+        Besides that it works in tandem with another attribute called preserveAspectRatio, which we will not go into further now.
+        To really get a graps of these attributes, you probably need to spend some late hours on it, getting more and more frustrated about it until the eureka moment occurs :)
+      -->
+    </svg>
+  </div>
+</body>
+
+</html>

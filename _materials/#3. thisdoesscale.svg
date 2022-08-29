@@ -1,0 +1,19 @@
+<?xml version="1.0" standalone="no"?>
+<svg version="1.1" width="400" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:xlink= "http://www.w3.org/1999/xlink">
+      <defs>
+        <clipPath id="cut-off-right">
+          <rect x="50" y="50" width="145" height="300" />
+        </clipPath>
+      </defs>
+      <rect width="300" height="300" fill="#294899" x="50" y="50" stroke="#94a3cc" stroke-width="25"></rect>
+      <circle r="150" fill="white" cx="200" cy="200"></circle>
+      <text y="200" x="200" font-size="32" fill="#294899" font-style="bold" text-anchor="middle"
+        dominant-baseline="middle">
+        BDCAcademy
+      </text>
+      <circle r="150" fill="#294899" cx="200" cy="200" clip-path="url(#cut-off-right)"></circle>
+      <text y="200" x="200" font-size="32" fill="white" font-style="bold" text-anchor="middle"
+        dominant-baseline="middle" clip-path="url(#cut-off-right)">
+        BDCAcademy
+      </text>
+    </svg>
