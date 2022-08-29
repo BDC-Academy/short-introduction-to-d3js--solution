@@ -30,3 +30,9 @@ After that, we will look at some of the basics of D3.js and use it to create ...
 
 ## Links
 [https://www.fusioncharts.com/blog/bar-charts-or-column-charts/](https://www.fusioncharts.com/blog/bar-charts-or-column-charts/)
+[https://github.com/d3/d3/blob/main/API.md#selections-d3-selection](https://github.com/d3/d3/blob/main/API.md#selections-d3-selection)
+[https://github.com/d3/d3/blob/main/API.md#scales-d3-scale](https://github.com/d3/d3/blob/main/API.md#scales-d3-scale)
+[https://observablehq.com/@thetylerwolf/day-3-controlling-the-flow-of-data](https://observablehq.com/@thetylerwolf/day-3-controlling-the-flow-of-data)
+[https://github.com/d3/d3-scale#linear-scales](https://github.com/d3/d3-scale#linear-scales)
+[https://github.com/d3/d3-scale#band-scales](https://github.com/d3/d3-scale#band-scales)
+
