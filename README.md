@@ -6,6 +6,7 @@ Difficulty: Intermediate
 D3.js is the undefeated champion when it comes to building visualisations using web technologies. D3.js enables you to 'bind' data to the Document Object Model (DOM) and make data driven changes to it. This training is a short introduction to the basics of D3.js.
 
 **Course content**
+
 D3.js is almost always used in combination with SVG because of its, well, scalability. 
 That is why we will first look at some of the basics of SVG and use it to create a simple barchart.
 After that, we will look at some of the basics of D3.js and use it to create ...a simple barchart... ;)
@@ -30,10 +31,16 @@ After that, we will look at some of the basics of D3.js and use it to create ...
 
 ## Links
 [https://www.fusioncharts.com/blog/bar-charts-or-column-charts/](https://www.fusioncharts.com/blog/bar-charts-or-column-charts/)
+
 [https://github.com/d3/d3/blob/main/API.md#selections-d3-selection](https://github.com/d3/d3/blob/main/API.md#selections-d3-selection)
+
 [https://github.com/d3/d3/blob/main/API.md#scales-d3-scale](https://github.com/d3/d3/blob/main/API.md#scales-d3-scale)
+
 [https://observablehq.com/@thetylerwolf/day-3-controlling-the-flow-of-data](https://observablehq.com/@thetylerwolf/day-3-controlling-the-flow-of-data)
+
 [https://github.com/d3/d3-scale#linear-scales](https://github.com/d3/d3-scale#linear-scales)
+
 [https://github.com/d3/d3-scale#band-scales](https://github.com/d3/d3-scale#band-scales)
+
 [https://observablehq.com/@d3/d3-scaleband](https://observablehq.com/@d3/d3-scaleband)
 
