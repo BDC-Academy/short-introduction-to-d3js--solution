@@ -85,13 +85,13 @@
       <!-- TODO: 5. adding text to the equation 
         Text element can also be positioned with the x and y attributes, colored with the 'fill' attribute and can even have a border with the 'stroke' attribute.
         You can further manipulate the appearance of the text with attributes similar to those of HTML/CSS,
-        like font-size, font-style, font-weight and font-family.
+        like font-size, font-weight, font-weight and font-family.
         Positioning the text with x and y determines the STARTING point (top left) of the text.
         Positioning the text element in the center of the svg will not display the text exactly in the middle, because the x and y position are used as STARTING point. 
         The text can be aligned however, by setting the 'text-anchor' attribute to start, middle or end with a default of start.
         text-anchor alignes the text horizontal and the 'dominant-baseline' attribute alignes it vertical with auto, middle and hanging as its most used values.
           - create a text element with the text 'ma'. The actual text is defined as a child of the text element.
-          - use the 'fill', 'font-style' and 'font-size' attributes to give the text a color, make it bold and size 14
+          - use the 'fill', 'font-weight' and 'font-size' attributes to give the text a color, make it bold and size 14
           - position the text (x and y) with the same y value as the horizontal line and the same x value as the first column
           - the text should now be 'standing' on top op of the horizontal line and at the bottom left of the first bar. Use the 'dominant-baseline' attribute to align the text so it is 'hanging' beneath the line
           - create a text element for each bar di, wo, do, vr and position them beneath the right bar
@@ -154,7 +154,7 @@
                         <rect width="40" height="250" fill="#294899" x="225" y="100" />
                         <rect width="40" height="300" fill="#294899" x="270" y="50" /> -->
 
-      <g id="content" fill="#294899" transform="translate(90, 250)" font-size="14" font-style="bold"
+      <g id="content" fill="#294899" transform="translate(90, 250)" font-size="14" font-weight="bold"
         text-anchor="middle" dominant-baseline="hanging">
         <g>
           <rect width="40" height="100" x="0" y="0" />
@@ -188,7 +188,7 @@
 
       <!-- <g id="x-axis"> -->
       <line x1="80" x2="320" y1="350" y2="350" stroke="red" stroke-width="2" />
-      <g transform="translate(20, 4)" font-size="14" fill="red" font-style="bold" text-anchor="middle"
+      <g transform="translate(20, 4)" font-size="14" fill="red" font-weight="bold" text-anchor="middle"
         dominant-baseline="hanging">
         <text y="350" x="90">ma</text>
         <text y="350" x="135">di</text>
@@ -200,7 +200,7 @@
 
       <!-- <g id="y-axis"> -->
       <line x1="80" x2="80" y1="350" y2="50" stroke="red" stroke-width="2" />
-      <g transform="translate(75, 0)" text-anchor="end" font-size="14" fill="red" font-style="bold"
+      <g transform="translate(75, 0)" text-anchor="end" font-size="14" fill="red" font-weight="bold"
         dominant-baseline="middle">
         <text y="350">0</text>
         <text y="320">10</text>
