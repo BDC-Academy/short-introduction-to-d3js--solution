@@ -24,19 +24,6 @@ code {
   border: 1px solid #eee;
 }
 
-/* #static-chart rect {
-  transform-box: fill-box;
-  transform-origin: bottom;
-  animation: enter-rect 1s forwards;
-
+h2 {
+ text-align: center;
 }
-
-@keyframes enter-rect {
-  0% {
-    transform: scaleY(0);
-  }
-
-  100% {
-    transform: scaleY(1);
-  }
-} */
