@@ -1,6 +1,6 @@
 /**
  * D3.js is in essence a DOM manipulation library.
- * It can be used to essentially manipulate any DOM be it HTML, SVG, Canvas or some other shiny DOM from the future (as long as you can use JavaScript with it).
+ * It can be used to manipulate any DOM, be it HTML, SVG, Canvas or some other shiny DOM from the future (as long as you can use JavaScript with it).
  *
  * D3.js is actually a bundle of different packages
  * - that contain utils like d3-array, d3-format, d3-time, etc.
@@ -20,7 +20,9 @@
  *
  * We are going to recreate the chart we made with SVG only with D3.js. 
  * Before we begin, there are already some pieces of code written below to make live a bit easier. 
- * Everything that is surrounded by ##readonly## should, as you would guess, not be altered. Let's look at the readonly code together real quick (give the teacher a 'yo' when you're done reading here)
+ * Everything that is surrounded by ##readonly## should, as you would guess, not be altered.
+ * 
+ * !important!: D3 will search the whole HTML document when using d3.select and d3.selectAll, so make sure you are selecting from the correct svg element with id d3-chart.
 */
 
 /**
@@ -29,30 +31,37 @@
  */
 function manuallyAppendColumn() {
   // TODO 1.1: Use the d3.select function to select the svg element by its id attribute 'd3-chart'.
-  // Store the result in a variable 'svg'. The result will be of type 'Selection'.
-  const svg = d3.select('#d3-chart');
+  // Store the result in a variable 'svgSelection'. The result will be of type D3 'Selection'.
+  const svgSelection = d3.select('#d3-chart');
 
-  // TODO 1.2: Use the d3.append function on the svg variable and append a 'rect' to it.
-  // Store the rect element in a variable 'rect'.
-  // You can see in the DOM that d3 already has appended the rect to the svg.
-  const rect = svg.append('rect');
+  // TODO 1.2: Use the d3.append function on the svgSelection and append a 'rect' to it.
+  // The append function receives a string which represents the name of the element to be created.
+  // Store the selection containing the rect element in a variable 'rectSelection'.
+  // You can see in the DOM that D3 already has appended the rect to the svg element.
+  const rectSelection = svgSelection.append('rect');
 
   // TODO 1.3: Use the d3.attr function on the rect variable to set the attribute 'width' of the rect to 40.
   // After that also set the following attributes using chaining syntax:
-  // height: 200, x: 180, y: 100 and fill: green
-  rect.attr('width', 40).attr('height', 200).attr('x', 180).attr('y', 100).attr('fill', 'green');
+  // height: 200, x: 180, y: 150 and fill: green
+  // This will be our 'woensdag' rect.
 
-  // TODO 1.4: Create 2 more columns using the append function on the svg variable.
-  // Put one on the right and one on the left, make them blue and change their height. Remember where svg y=0 was and how the rect is drawn?
-  svg.append('rect').attr('width', 40).attr('height', 100).attr('x', 135).attr('y', 200).attr('fill', '#294899');
-  svg.append('rect').attr('width', 40).attr('height', 150).attr('x', 225).attr('y', 150).attr('fill', '#294899');
+  // TODO 1.4: Create 4 more columns using the append function on the svgSelection variable.
+  // Create a column for each of the remaining days in the dataset and position them correctly just like we did with the SVG only chart.
+  // Make the rects blue, 40px wide and put 10 pixels between each rect.
+  // Set their height based on the dataset values, the same as we did with the SVG only chart.
+  // Tip: Remember where svg y=0 was and how the rect is drawn?
+  svgSelection.append('rect').attr('width', 40).attr('height', 100).attr('x', 80).attr('y', 250).attr('fill', '#294899');
+  svgSelection.append('rect').attr('width', 40).attr('height', 150).attr('x', 130).attr('y', 200).attr('fill', '#294899');
+  rectSelection              .attr('width', 40).attr('height', 200).attr('x', 180).attr('y', 150).attr('fill', 'green');
+  svgSelection.append('rect').attr('width', 40).attr('height', 250).attr('x', 230).attr('y', 100).attr('fill', '#294899');
+  svgSelection.append('rect').attr('width', 40).attr('height', 300).attr('x', 280).attr('y', 50).attr('fill', '#294899');
 
   // Woop woop! We created our first columns using D3.js!
   // But we did it manually and not based on any data, That's not very useful..
 
   // TODO 1.5: Use the .selectAll function on the svg variable to select every rect that is a direct child of this svg and store the result in a variable 'allRects'.
   // This result will also be of type 'Selection'. See what the result looks like by using the browsers debugging tools.
-  const allRects = svg.selectAll('rect');
+  const allRects = svgSelection.selectAll('rect');
 
   // TODO: 1.6 Change the color of all rects we selected to 'red', by using the .attr function on 'allRects'.
   // You can treat a selection that contains more elements the same way as a selection with one element.
@@ -68,66 +77,76 @@ function manuallyAppendColumn() {
  * Let's do that again but based on our actual dataset we already defined below.
  * We will use the functions d3.selectAll, selection.data and selection.enter to achieve this.
  * 
- * Note: student beware! D3.js selections and data joining can become pretty magical pretty fast.
+ * Note: D3.js selections and data joining cán become pretty magical pretty fast.
  * It's not a problem if you can't wrap your mind around it right away. You will eventually, someday.. maybe..
  */
 function dynamicallyAppendColumn() {
-  // TODO 2.1: Use the d3.select function to select the svg element again and store it in variable 'svg'.
-  const svg = d3.select('#d3-chart');
+  // TODO 2.1: Use the d3.select function to select the svg element again and store the resulting selection in variable 'svgSelection'.
+  const svgSelection = d3.select('#d3-chart');
 
-  // TODO 2.2: Use the .selectAll function on 'svg' to selectAll rect's inside the svg and store it in variable 'allRects',
-  // But wha? There are no rect's inside our svg yet.. anymore.
-  // That's right, so our selection will be empty initially.
-  const allRects = svg.selectAll('rect');
+  // TODO 2.2: Use the .selectAll function on 'svgSelection' to selectAll rect's inside the svg and store it in variable 'allRectSelection'.
+  // But wha? There are no rect's inside our svg yet... That's right, so our selection will be empty initially.
+  const allRectSelection = svgSelection.selectAll('rect');
 
-  // TODO 2.3: Bind our dataset to the selection and store the result in a variable 'boundRects'
-  // There is this function called .data on every selection. You can supply it with every value you want, as long as it is iterable.
+  // TODO 2.3: Bind our dataset to the selection and store the result in a variable 'boundRectSelection'
+  // There is this function called .data on every D3 selection. You can supply it with every value you want, as long as it is iterable.
   // When you do this all kinds of magic happens under water. D3.js is actually 'joining' the elements in our selection with our data, much like an SQL join works.. sorta.
   // After you bound the dataset to our selection, use the browser debugger tools to see what our selection 'boundRects' looks like and ask your teacher wtf.
   // Notice that allRects and boundRects are not the same selection anymore.
-  const boundRects = allRects.data(dataset);
+  const boundRectSelection = allRectSelection.data(dataset);
 
-  // TODO: 2.4: use the .enter function that is now available on our selection 'boundRects'
-  // to get the selection of elements that do not exist in the DOM yet but do exist in data. Store it in a variable 'enterSelection'.
+  // TODO: 2.4: use the .enter function that is now available on our 'boundRectSelection'
+  // To get the selection of elements that do not exist in the DOM yet but do exist in data, we use the selections 'enter' function after we bound data to it. 
+  // Store the result in a variable 'enterSelection'.
   // Inspect the result again using debugger. The enter selection contains five items that are 'placeholders' for DOM elements.
-  const enterSelection = boundRects.enter();
+  const enterSelection = boundRectSelection.enter();
 
   // TODO: 2.5: Add a rect element for each placeholder element that is in our enterSelection.
-  // You can treat the enter selection the same as every other, so chaining append or attr for example.
-  // call the append function on the enterSelection, append a 'rect' and store the result in variable 'appendedSelection'.
+  // You can treat the enter selection the same as every other, so you can chain append or attr for example.
+  // Call the append function on the enterSelection, append a 'rect' and store the result in variable 'appendedSelection'.
   // Inspect the result again using debugger. The enter selection now contains five items that are svg rect elements.
+  // The DOM will now also contain the rects.
   const appendedSelection = enterSelection.append('rect');
 
   // TODO 2.6: Set the attrs of the rects in our appendedSelection.
   // But what value do we use for our attr width, height, etc.? Well that is where our data comes in.
   // You can supply a function as an argument for most of the D3 chaining functions, including attr.
-  // These functions are called 'accessor functions' (see link 'controlling flow of data' in readme)
-  // and always get three arguments supplied to them: (d)ata-item, (i)ndex, (n)odes.
-  // The data-item is actually one of the items in the dataset we used with the data function, 
-  // the index is the current iteration index (d3 is actually iterating) and nodes are all the nodes in our current selection.
+  // These functions are called 'accessor functions' (see link 'controlling flow of data' in readme).
+  // Accessor functions always get three arguments supplied to them: (d)ata-item, (i)ndex and (n)odes
+  // and return a numeric or string value, depending on the attr you want to set.
+  // The data-item is actually one of the items in the dataset we used with the .data function,
+  // the index is the current iteration index (D3 is actually iterating under water) and nodes are all the nodes in our current selection.
   // You can define an accessor function as an anonymous (arrow) function like so: enterSelection.attr('height', (d, i, n) => ...return a number...)
-  // It's not yet possible to properly calculate our height, x and y based on our data-item so we will improvise a bit.
-  // Set the attrs width, height, x and of our enterSelection using accessor functions, except for width which should always be 40.
-  // Set height to d.value * 3, set x to i * 45 + 90 and set y to height - 50 - d.value * 3
+
+  // We will still need to manually calculate our rectangle's width, height, x and y for now.
+  // Set the attrs width, height, x and y on our appendedSelection using accessor functions, except for width which should always be fixed 40px.
+  // - to calculate the height: divide our max bar height (300) by 100 and then multiply by the value of the data-item.
+  // - to calculate the y position: 
+  //  - take the 'svgHeight' variable and substract the height of the rect from it (need to calculate height again)
+  //  - To create the bottom margin you need to substract another 50 (px)
+  // - to calculate the x position: 
+  //  - Take the width of the column (40) 
+  //  - add the padding between the columns to it (10)
+  //  - multiply the result by the column index (i)
+  //  - lasty, add the space/margin we want on the left of the chart (50)
+
+  // Note: are you not familiar with arrow functions? Scream, shout and let it all out (ask your teacher).
   appendedSelection
     .attr('width', 40)
     .attr('fill', '#294899')
-    .attr('x', (d, i, n) => i * 45 + 90)
-    .attr('height', (d, i, n) => d.value * 3)
-    .attr('y', (d, i, n) => height - 50 - d.value * 3)
-
-  // TODO 2.7: redo step 2.2 to 2.6 in one chain
-  // I though D3.js could chain all the things? Yes it can but this was easier to learn what was happening.
-  // Instead of storing a new selection every step, you can chain everything from step 2.2 to 2.6, so go do it.
-  //...
-
-  // TODO Extra: How could you make the 3rd column appear green again?
+    .attr('x', (d, i, n) => (40 + 10) * i + 80)
+    .attr('height', (d, i, n) => 300 / 100 * d.value)
+    .attr('y', (d, i, n) => svgHeight - (300 / 100 * d.value) - 50)
 
   // TODO 2.8: delete every column again (sorry)
-  // by binding an empty dataset to our appendedSelection with the data function
-  // and chain calling the .exit function to get the selection of elements that are in the DOM but not in the data.
-  // Chain call the .remove function to remove all.
-  appendedSelection.data([]).exit().remove();
+  // Call the .remove function on the appendedSelection to remove all rectangles again.
+  // appendedSelection.remove();
+
+   // TODO Extra: redo step 2.2 to 2.6 in one chain
+  // I though D3.js could chain all the things? Yes it can but this was easier to learn and see what was happening.
+  // Instead of storing a new selection every step, you can chain everything from step 2.2 to 2.6, so go do it.
+  
+  // TODO Extra: How could you make the 3rd column appear green again?
 
 }
 
@@ -240,7 +259,7 @@ function appendingAxis(scales) {
 
   // TODO 4.5: Use the generator setter functions to change the tick appearances
   // Wow, it fits perfectly! It's even centered beneath the column correctly. It still is ugly though..
-  // First of all, we don't want to see the full label, just the first 2 letters. You can do this by using the generator's tickFormat setter. 
+  // First of all, we don't want to see the full label, just the first 2 letters. You can do this by using the generator's tickFormat setter.
   // The tickFormat function receives an accessor as single argument, with d being a 'tick' which in this case is a label from our xScale's domain.
   // Call the .tickFormat on the generator using chaining (.axisBottom().tickFormat()) and return a substr of d.
   // We also don't want those ugly vertical lines pointing to our tick values.
@@ -249,17 +268,17 @@ function appendingAxis(scales) {
   // TODO 4.6: Manually change the styling of our axis elements
   // To actually change the style of our axis and make it appear bold, red, etc. we need select the correct elements and set their attrs.
   // Inspect the DOM if you haven't already and see what elements the axis has.
-  // Select the #x-axis with D3 and set the following attributes to make it appear the same as our svg only chart: font-size, font-family, font-weight, color.
-  // Select the line/path .domain and make its stroke-width '2px'.
+  // Select the #d3-chart #x-axis with D3 and set the following attributes to make it appear the same as our svg only chart: font-size, font-family, font-weight, color.
+  // Select the line/path .domain and make its stroke-width '1px'.
   // Note: instead of using attributes, you can set/override most of the styling with a 'style' attr that takes a CSS string.
   // Note2: you can actually do all this in one chain using a nested selection.
-  d3.select('#x-axis')
+  d3.select('#d3-chart #x-axis')
     .attr('font-size', '14px')
     .attr('font-family', 'Helvetica Neue')
     .attr('font-weight', 'bold')
     .attr('color', 'red')
     .select('.domain')
-    .attr('stroke-width', '2px');
+    .attr('stroke-width', '1px');
 
   // TODO 4.7: now create the yAxis the same way you did the xAxis
   // Not gonna tell you how yet, you figure it out!
@@ -269,13 +288,13 @@ function appendingAxis(scales) {
   const yAxisGenerator = d3.axisLeft(yScale).tickSize(0);
   yAxisGenerator(yAxis);
 
-  d3.select('#y-axis')
+  d3.select('#d3-chart #y-axis')
     .attr('font-size', '14px')
     .attr('font-family', 'Helvetica Neue')
     .attr('font-weight', 'bold')
     .attr('color', 'red')
     .select('.domain')
-    .attr('stroke-width', '2px');
+    .attr('stroke-width', '1px');
 
   // Wooptiedoo, almost there!
 }
@@ -366,14 +385,15 @@ function appendingValuesAndGridLines(scales) {
 }
 
 function draw() {
-  manuallyAppendColumn();
+  // manuallyAppendColumn();
   dynamicallyAppendColumn();
-  const scales = positioningAndSizingUsingScales();
-  appendingAxis(scales);
-  appendingValuesAndGridLines(scales);
+  // const scales = positioningAndSizingUsingScales();
+  // appendingAxis(scales);
+  // appendingValuesAndGridLines(scales);
 }
 
 //## readonly ##
+// This dataset is globally accessible in this file
 const dataset = [
   { label: 'maandag', value: 33 },
   { label: 'dinsdag', value: 50 },
@@ -390,21 +410,28 @@ const dataset = [
  * @returns 
  */
 function createSVGSVGElement(width, height, id) {
-  // select the element we want to add our svg graphic to, our root div 
+  // Select the element we want to add our svg graphic to, our root div.
+  // Selecting elements from the DOM with D3 is done with css-selectors (element name, id or class and even selecting nested elements for, example 'div p #myTextId'
+  // D3 select and selectAll functions return a D3 selection which contain zero, one or multiple elements.
+  // Selections are used to manipulate all the DOM elements that it contains, without having to iterate them.
   const rootSelection = d3.select('#root');
-  // append an svg element to our root element with D3
+  // Append an svg element to our root element with D3.
+  // Appending elements to the DOM with D3 is done by element name, for example 'svg' or 'rect' or 'div'
   const svgSelection = rootSelection.append('svg');
 
-  // using chaining syntax (selection is returned after (almost) every function call)
-  svgSelection.attr('id', id)
+  // Using chaining syntax. The updated D3 selection is returned after every attr call, making the chaining syntax possible.
+  // Most of the other D3 functions that can be chained also return the updated D3 selection, with one or two exceptions.
+  svgSelection
+    .attr('id', id)
     .attr('class', 'my-graphic')
     .attr('width', width)
     .attr('height', height)
-    .attr('viewBox', [0, 0, width, height]);
+    // .attr('viewBox', [0, 0, width, height]);
 
   return svgSelection;
 }
-const width = 400, height = 400;
-createSVGSVGElement(width, height, 'd3-chart');
+// svgWidth and svgHeight are globally accessible in this file
+const svgWidth = 400, svgHeight = 400;
+createSVGSVGElement(svgWidth, svgHeight, 'd3-chart');
 draw();
 // ##readonly##

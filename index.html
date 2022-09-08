@@ -68,7 +68,7 @@
 
       <rect width="40" height="100" fill="#294899" x="80" y="250" />
       <rect width="40" height="150" fill="#294899" x="130" y="200" />
-      <rect width="40" height="200" fill="green" x="180" y="150" />
+      <rect width="40" height="200" fill="green"   x="180" y="150" />
       <rect width="40" height="250" fill="#294899" x="230" y="100" />
       <rect width="40" height="300" fill="#294899" x="280" y="50" />
 
@@ -102,7 +102,7 @@
       <!-- TODO: 1. creating elements and defining their width and height
         A rect element can be used to draw, you guessed it, rectangles.
           - create a rect element with a 'width' attribute of 40 and a 'height' attribute of 200 (pixels)
-          - give the rect a color #294899 using the 'fill' attribute
+          - give the rect the color '#294899' using the 'fill' attribute
 
         Note: Pretend this rect is actually our 'woensdag' column. So we set the value of 'woensdag' (66) equal to 200 px in our SVG view.
         Note2: Our SVG is 400 by 400 px, but we will make our chart max 300 pixels in height and ~320 pixels in width.
@@ -124,6 +124,8 @@
             - put 10px of room between the rects
             - calculate what the height of the other rects should (approximately) be, 
               based on their value in the dataset and the fact that 'woensdag' is 200px in height.
+            - lastly, we want 'woensdag' to stand out in the chart because it is important (for some reason).
+              Do this by giving it a different color 'green'
         
         Tip: are your bars 'hanging from the ceiling' by any chance?
         Remember y position 0 is at the top of the svg an the rect is drawn from the top left.
