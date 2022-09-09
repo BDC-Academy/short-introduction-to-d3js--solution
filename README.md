@@ -47,6 +47,8 @@ D3 Selections
 
 D3 Scales
 
+[https://www.d3indepth.com/scales/](https://www.d3indepth.com/scales/)
+
 [https://github.com/d3/d3/blob/main/API.md#scales-d3-scale](https://github.com/d3/d3/blob/main/API.md#scales-d3-scale)
 
 [https://github.com/d3/d3-scale#linear-scales](https://github.com/d3/d3-scale#linear-scales)
