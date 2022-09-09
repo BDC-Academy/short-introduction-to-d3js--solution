@@ -140,7 +140,7 @@ function dynamicallyAppendColumn() {
 
   // TODO 2.8: delete every column again (sorry)
   // Call the .remove function on the appendedSelection to remove all rectangles again.
-  // appendedSelection.remove();
+  appendedSelection.remove();
 
    // TODO Extra: redo step 2.2 to 2.6 in one chain
   // I though D3.js could chain all the things? Yes it can but this was easier to learn and see what was happening.
@@ -151,63 +151,64 @@ function dynamicallyAppendColumn() {
 }
 
 /**
- * Now we added our columns dynamically, but we still had to manually calculate what position an size they should have.
- * D3.js has utils for that you know, so let's those instead.
- * We can use d3-scales to convert our data into y, x, height and width values. D3.js uses interpolation for this.
- * We will use the functions d3.scaleLinear, d3.scaleBand and d3.scaleOrdinal to achieve this.
+ * We added our columns dynamically, but we still had to manually calculate the positions and sizes.
+ * D3.js has utils for that, so let's use those instead.
+ * We can use d3-scales to convert our data into y, x, height and width values. 
+ * D3 converts values to pixels on screen, colors, categories or other output ranges using interpolation.
+ * We will use the functions d3.scaleLinear, d3.scaleBand.
  */
 function positioningAndSizingUsingScales() {
   // TODO 3.1: Start by calling d3.scaleLinear which will return a scaling function. Store the scaling function as yScale.
-  // See why we use a linear scale for our y? When we created the y axis in svg, it went from number 0 to 100 in equally divided steps.
+  // Why do we use a linear scale for our y? When we created the y axis in our SVG only chart, it went from number 0 to 100 in equally divided steps, i.e. a linear scale.
   const yScale = d3.scaleLinear();
 
   // TODO 3.2: Configure the yScale using the property setter functions it provides.
-  // You can configure scales by (chain) calling the setter functions ot exposes.
-  // The most important one's are domain and range.
-  // Domain defines the minimum and maximum number between which our data values will / must reside.
-  // Range defines the (range of) values that are used in the scales underlying interpolation. 
-  // In other words it maps (sort of) a specific domain value (usually number) to a specific range value (usually a number that represents a y or x coordinate).
+  // You can configure scales by (chain) calling the setter functions it exposes.
+  // The most important one's are domain and range, which accept an array as a single argument.
+  // Domain defines the minimum and maximum (number) between which our data values will / must reside.
+  // Range defines the (range of) values that are used in the scales underlying interpolation.
+  // In other words it maps a specific domain value, in this case a number, to a specific range value (usually a number that represents a y or x coordinate).
   // Call the .domain function on the yScale and set it to our min and maximum values: [0, 100]
-  // After that chain call the .range function on the yScale and set it's value to 
-  // y position/pixels that we want to make available to our columns: [350, 50] (ask your friendly wtf)
-  // Note: usually, the max value is calculated using for example d3.max and sometimes the min value is calculated also, but it should almost always be 0.
+  // After that chain call the .range function on the yScale and set it's value to the
+  // y position/pixels that we want to make available to our columns: [350, 50]. Huh? but these values are inverted! jup, because y=0 is at the top of the grid.
+  // Note: usually, the max value is calculated using for example d3.max and sometimes the min value is calculated also, but it usually 0.
   yScale.domain([0, 100]).range([350, 50]);
 
   // TODO 3.3: Create our xScale function by calling d3.scaleBand and set its domain and range.
-  // Our x scale is not a linear or numeric scale. It actually is a 'categorical dimension', as it is divided into the categories maandag,dinsdag,woensdag,donderdag,vrijdag.
+  // Our x scale is not a linear or numeric scale. It actually is a 'categorical dimension', as it is divided into the categories maandag, dinsdag, woensdag, donderdag, vrijdag.
   // A scale band takes all our categories as domain and takes a numeric range. It maps (interpolates) each category to a specific number in the range.
-  // Create the xScale scaling functions using d3.scaleBand, set its domain to [maandag,dinsdag,woensdag,donderdag,vrijdag] and its range to [80, 320].
-  // Note: to get the domain of the xScale, you could/should use dataset.map
-  const xScale = d3.scaleBand().domain(dataset.map(d => d.label)).range([80, 320]).paddingInner([0.1]).paddingOuter([0.2]);
+  // Create the xScale scaling functions using d3.scaleBand, set its domain to ['maandag','dinsdag','woensdag','donderdag','vrijdag'] and its range to [70, 330].
+  // Note1: The range is 50 margin left or right + 20px padding
+  // Note2: to get the domain of the xScale, you could/should use dataset.map
+  const xScale = d3.scaleBand().domain(dataset.map(d => d.label)).range([70, 330]).padding([0.2]);
 
-  // TODO 3.4: Create a colorScale scaling function by calling d3.scaleOrdinal and set its domain and range.
-  // We can actually create a scale to determine the color of our columns, as we want the center one (woensdag) to be green.
-  // You do this by creating an ordinal scale with d3.scaleOrdinal. a scaleband is actually a special kind of ordinal scale that outputs numbers.
-  // Create an ordinal scale with our dataset labels as domain and and equal number of colors as range [blue, blue, green, blue, blue]
-  // Note: our colorScale is pretty simple, it actual is a one on one mapper, but can be handy when you don't know how much labels you have. You can also use color interpolation using for other scaling types.
-  const colorScale = d3.scaleOrdinal().domain(dataset.map(d => d.label)).range(['#294899', '#294899', 'green', '#294899', '#294899']);
-
-  // TODO 3.5: Call each scales with arbitrary values within their domain 
-  // and use the browser debugger to see what they return. 
-  // For example: const y = yScale(34)
+  // TODO 3.4: Create a colorScale scaling function by calling d3.scaleLinear and set its domain and range.
+  // We can actually create a scale to give a different color to each of our columns, using interpolation.
+  // We will use a linear scale again (other scales can also be used) but we need to specificy our domain and range a bit different.
+  // Create another scaleLinear and call it 'colorScale'. 
+  // Set the colorScale's domain to the minimum index of the dataset (0) and the maximum index of the dataset (length - 1).
+  // Set the colorScale's range to start with 'red' and end with 'blue'.
+  // Note: remember, domain and range accept an array as a single argument.
+  // Note: we could (and should) use an ordinalScale to one on one map a category to a fixed color, but this is way color.
+  const colorScale = d3.scaleLinear().domain([0, dataset.length - 1]).range(['red', 'blue']);
 
   // TODO 3.5: Create the columns again and use the scales to get the x,y and width and height values.
   // Now that we created our scales we can use them to calculate the position and sizing of elements, based on our data.
-  // Select our svg using d3.select and create the columns again like we did in assigment 2.
+  // Select our #d3-chart using d3.select and create the columns again like we did in assigment 2.
   // Use the scales to calculate what the values for x, y, width, height and fill should be.
   // You can get the value or label you need from d in the accessor functions (d, i, nodes) =>
   // - calculate width: scaleBand has another function you can use to get the width of a column / category called .bandwidth()
   // - calculate x: call xScale with the category/label from d
   // - calculate y: call yScale with the value from d
-  // - calculate height: take the max y position (350) and substract the yScale result of d.value
-  // - calculate fill: use the colorScale with d.label
+  // - calculate height: take the max y position (350) and substract the yScale result of d.value (because, you know, y=0)
+  // - calculate fill: use the colorScale with (i)ndex
   const svg = d3.select('#d3-chart');
   svg.selectAll('rect')
     .data(dataset)
     .enter()
     .append('rect')
     .attr('width', (d, i, nodes) => xScale.bandwidth())
-    .attr('fill', (d, i, nodes) => colorScale(d.label))
+    .attr('fill', (d, i, nodes) => colorScale(i))
     .attr('x', (d, i, n) => xScale(d.label))
     .attr('height', (d, i, n) => 350 - yScale(d.value))
     .attr('y', (d, i, n) => yScale(d.value))
@@ -215,24 +216,26 @@ function positioningAndSizingUsingScales() {
   // TODO 3.6: Add inner and outer padding to the xScale
   // You will notice that the columns are squished together.
   // That is because we did not set any so called (inner) padding between the bars nor on the outside (outer padding).
-  // Use the .paddingInner setter function on the bandScale and set it to [0.1]. Set the .paddingOuter to [0.2].
+  // We can set the inner and outer padding at the same time with the setter .padding function on the bandScale, which accepts an array with a single value in it.
+  // Set the padding to [0.2]
+
 
   // TODO 3.7: Return our scales so we may use them in our next assigment
-  // This time you may keep the columns you created as the are perfect ;)
+  // This time you may keep the columns you created as they are perfect ;)
   // In fact, we need the scales we created in the next assigment so we want to return them here as a result of this function.
   return { yScale, xScale, colorScale };
 }
 
 /**
  * We created scales and used them to position our elements and calculate their size.
- * We can also use these scale the generate axis with D3. D3 will actually use the scale the same way 
- * we did to generate lines and 'ticks' and position them correctly.
+ * We can also use these scales to generate an axis with D3. D3 will actually use the scale the same way 
+ * we did with the columns, to generate lines and 'ticks' and position them correctly.
  * We will use the functions d3.axisBottom and d3.axisLeft to generate our axis. The result of these functions are generators that generate an axis 'component'.
- * After that we can use setter functions on the axis to tweak it visually. 
+ * After that we can use setter functions on the axis to configure and tweak it visually.
  */
 function appendingAxis(scales) {
   // Note: we need our scales to generate axis with D3
-  const { yScale, xScale, colorScale } = scales;
+  const { yScale, xScale } = scales;
 
   // TODO 4.1: Create a g element that functions as a container for an axis
   // Before we generate an axis we need a place to put it in the DOM, a container group element.
@@ -241,17 +244,17 @@ function appendingAxis(scales) {
   const xAxis = svg.append('g').attr('id', 'x-axis').attr('transform', 'translate(0, 350)');
 
   // TODO 4.2: Use the d3.axisBottom to generate our xAxis
-  // To generate an axis with D3, we can create an axis generator using the axis functions.
+  // To generate an axis with D3, we create an axis generator using the axis functions.
   // You just need to provide a D3 scale as a single argument, our xScale, to the axis function and it will return a generator.
-  // We can't reach our xScale from here, so you will need to extract it outside our previous assigment or copy it here.
-  // store the resulting generator of .axisBottom in a variable 'xAxisGenerator'.
+  // Call the d3.axisBottom function and store the resulting generator function in a variable 'xAxisGenerator'.
+  // Note: By the way, it is called axisBottom because D3 will put the 'ticks' below the horizontal line. Guess what axisTop, axisLeft axisRight do :)
   const xAxisGenerator = d3.axisBottom(xScale).tickFormat((label, d) => `${label.substr(0, 2)}`).tickSize(0);
 
   // TODO 4.3: Use the generator function and pass our g container element xAxis as a single argument to generate our x axis
-  // Note: By the way, it is called axisBottom because D3 will put the 'ticks' below the horizontal line. Guess what axisTop, axisLeft axisRight do :)
+  // The generator will use the scale and any other configuration to create an axis component and add it as a child to the xAxis container.
   xAxisGenerator(xAxis);
 
-  // TODO 4.4: Position the axis correctly by transform the group element xAxis.
+  // TODO 4.4: Position the axis correctly by transforming the group element xAxis.
   // An axis will always be generated at the 'origin' position so our xAxis is now hanging from the ceiling..
   // Why? because our scale is one-dimensional, from the left to the right, horizontal. So y will always be 0, which is at the top of the svg.
   // Now that the axis is visible we can edit it's appearance by modifying it's DOM elements and the g container and also by using the generator's setter functions.
@@ -260,31 +263,27 @@ function appendingAxis(scales) {
   // TODO 4.5: Use the generator setter functions to change the tick appearances
   // Wow, it fits perfectly! It's even centered beneath the column correctly. It still is ugly though..
   // First of all, we don't want to see the full label, just the first 2 letters. You can do this by using the generator's tickFormat setter.
-  // The tickFormat function receives an accessor as single argument, with d being a 'tick' which in this case is a label from our xScale's domain.
-  // Call the .tickFormat on the generator using chaining (.axisBottom().tickFormat()) and return a substr of d.
+  // The tickFormat function receives an accessor function as a single argument, with d being a 'tick' which in this case is a label from our xScale's domain.
+  // Call the .tickFormat on the generator using chaining (.axisBottom().tickFormat(...)) and return a substr of d of the first 2 letters.
   // We also don't want those ugly vertical lines pointing to our tick values.
   // Remove these by chaining another setter function to the generator .tickSize, and set it to 0.
 
-  // TODO 4.6: Manually change the styling of our axis elements
-  // To actually change the style of our axis and make it appear bold, red, etc. we need select the correct elements and set their attrs.
+  // TODO 4.6: Manually changing the styling of our axis elements
+  // To actually change the style of our axis and make it appear bold, red, etc. we need to select the correct elements and set their attrs.
   // Inspect the DOM if you haven't already and see what elements the axis has.
-  // Select the #d3-chart #x-axis with D3 and set the following attributes to make it appear the same as our svg only chart: font-size, font-family, font-weight, color.
-  // Select the line/path .domain and make its stroke-width '1px'.
-  // Note: instead of using attributes, you can set/override most of the styling with a 'style' attr that takes a CSS string.
-  // Note2: you can actually do all this in one chain using a nested selection.
+  // Select the #d3-chart #x-axis with D3 and set the following attributes to make it appear the same as our SVG only chart: font-size, font-family, font-weight, color.
+  // Note: instead of using attributes, you can also set/override most of the styling with a 'style' attr that takes a CSS string.
   d3.select('#d3-chart #x-axis')
     .attr('font-size', '14px')
     .attr('font-family', 'Helvetica Neue')
     .attr('font-weight', 'bold')
-    .attr('color', 'red')
-    .select('.domain')
-    .attr('stroke-width', '1px');
+    .attr('color', 'red');
 
   // TODO 4.7: now create the yAxis the same way you did the xAxis
   // Not gonna tell you how yet, you figure it out!
   const yAxis = svg.append('g')
     .attr('id', 'y-axis')
-    .attr('transform', 'translate(80, 0)');
+    .attr('transform', 'translate(70, 0)');
   const yAxisGenerator = d3.axisLeft(yScale).tickSize(0);
   yAxisGenerator(yAxis);
 
@@ -292,74 +291,41 @@ function appendingAxis(scales) {
     .attr('font-size', '14px')
     .attr('font-family', 'Helvetica Neue')
     .attr('font-weight', 'bold')
-    .attr('color', 'red')
-    .select('.domain')
-    .attr('stroke-width', '1px');
+    .attr('color', 'red');
 
   // Wooptiedoo, almost there!
 }
 
 /**
- * We only need to add gridlines and real values to finish our chart and make it visually appealing and useable.
- * We will once again use our scales to calculate the position of the text and line elements, based on the dataset and ticks.
+ * We only need to add gridlines to finish our chart.
+ * We will once again use our scales to calculate the position of the line elements, based on the dataset and ticks.
  * We won't be using any new D3 functions, except for getting the ticks that our yScale generates based on it's configuration,
- * which we will use a dataset for the gridlines.
+ * which we will use to generate a dataset for the gridlines.
  */
 function appendingValuesAndGridLines(scales) {
   // Note: we need our scales to calculate position
   const { yScale, xScale, colorScale } = scales;
   const svg = d3.select('#d3-chart');
 
-  // TODO: 5.1: append text elements to the top of each column with their value
-  // First let's add the text elements that show the numeric value that the columns represent.
-  // Append another g element to the svg and .selectAll text elements inside it (there are none yet)
-  // Chain call the data function with our dataset as value and call .enter to get the generated 
-  // selection of elements that are not yet in the DOM.
-  // Chain call .append to actually add the text elements to the DOM.
-  // Now we can set the attributes of each text element:
-  // The actual text of a svg text-element is set with a property 'textContent' instead of an attribute.
-  // To account for this (and some other properties), D3 has added another setter function you can chain called 'text'.
-  // Use .text to set the content of each text element. The text should be d.value.
-  // Now for positioning the elements, use the scales to set the text element's y and x, just like we did with our column rect elements.
-  // If you haven't done it already, see what the result is on screen. 
-
-  // Almost, but not yet done.
-  // We want our text to be hanging, so set the dominant-baseline.
-  // Set the fill to white to make it more readable.
-  // Our text is not centered inside the column. This is because the column starts drawing at the top left and we put our text at the exact same y.
-  // To center the text we will add half a column to the text's x value, so 40 / 2 = 20 
-  // still not there yet, because our text-anchor is still start, set it to middle and we are done!
-
-  svg.append('g')
-    .attr('id', 'values')
-    .selectAll('text')
-    .data(dataset)
-    .enter()
-    .append('text')
-    .attr('fill', 'white')
-    .attr('text-anchor', 'middle')
-    .attr('dominant-baseline', 'hanging')
-    .attr('x', (d) => xScale(d.label) + 20) // + 20 is half a column
-    .attr('y', (d) => yScale(d.value))
-    .text((d) => d.value);
-
-
-  // TODO 5.2: Create horizontal grid lines using the array of ticks the yScale generates
+  // TODO 5.1: Create horizontal grid lines using the array of ticks the yScale generates
   // To create our tick lines we use multiple line elements just like we did at the svg only chart.
   // To know how many gridlines we need and where to put them, we need to know what ticks are generated by the yScale.
   // We can get an array of all ticks that our current configuration of the yScale generates with the .tick function.
   // Call the .tick function on the yScale and store the result in variable 'yTicks'.
-  // The yTicks array contains all tickvalues that our y-axis is showing, including 0. We don't want a gridline at 0 so remove it from the array.
+  // The yTicks array contains all tickvalues that our y-axis is showing, including 0.
+  // We don't want a gridline at the 0 tick so remove it from the array using the JavaScript #array#.shift() function (google it).
 
   // Now we can use the ticks as our data to generate the gridlines.
-  // Append a g element to the svg and selectAll line in it (none yet, you know).
+  // Append a g element to the svg and .selectAll line in it (no lines yet, so results in an empty selection).
   // Chain call the .data function and supply the yTicks as dataset.
-  // Now .enter and append line to actually add the lines to the DOM.
+  // Now .enter and .append 'line' to actually add the lines to the DOM.
   // Give each line a stroke, stroke-width and stroke-dasharray.
-  // Finally, to calculate each lines x1, x2, y1 and y2 we use our scales again.
-  // The y's are both the same and are exactly the same as the y of the ticks. d will be the tick value which we can use with the yScale to calculate to correct y1 and y2 positions. do it.
-  // To calculate x, we need to know where our scale range starts. You can get the range of a scale by calling .range on it without arguments. It will return exactly what you put into it [80, 320]
-  // Set x1 to the start of the range of xScale and x2 to the end of the range of xScale
+  // Finally, to calculate each line's x1, x2, y1 and y2 we use our scales again.
+  // The y's are both the same and are exactly the same as the y of the ticks.
+  // The accessor function d value will be the tick which we can use with the yScale to calculate the correct y1 and y2 positions. Do it, do it now!
+  // To calculate x, we need to know where our scale range starts. You can get the range of a scale by calling the .range function on said scale without arguments.
+  // It will return the exact value you put into it [70, 330].
+  // Set x1 to the start of the range of xScale and x2 to the end of the range of xScale.
 
   // You've probably noticed that the order of svg elements is important, as our gridlines are now on top our bars... :S
   // You can fix this by using svg.insert() instead of .append. insert takes two arguments: the element name and secondly a css element selector.
@@ -382,18 +348,36 @@ function appendingValuesAndGridLines(scales) {
     .attr('y2', (d) => yScale(d))
     .attr('x1', (d) => xScale.range()[0])
     .attr('x2', (d) => xScale.range()[1]);
-}
 
-function draw() {
-  // manuallyAppendColumn();
-  dynamicallyAppendColumn();
-  // const scales = positioningAndSizingUsingScales();
-  // appendingAxis(scales);
-  // appendingValuesAndGridLines(scales);
+
+  // Our beautiful column chart is finally finished!
+  // No position, width or height was calculated manually, we did it all by using scales!
+  // Of course there is so much more to learn about creating charts with D3.js, we just got started with the column chart!
+  // how do we create a legend or a tooltip?
+  // what if we add another dimension to our column chart and the columns need to be stacked?
+  // How the h*ll do we animate these static svg elements?
+  // How do we update the chart when our dataset changes?
+  // Alas, we are out of time (are we?).
+  // If you want to learn more, you can follow this twelve hour course on youtube (who has the time?!) https://www.youtube.com/watch?v=_8V5o2UHG0E
+  // Or ask your teacher about the full introduction course.
+
+  // TODO Extra: If we still have time, we can venture into the lands of the enter + update + exit pattern
+  // (and scramble your brain a bit) to create a dynamic chart that can updates when the dataset changes.
+  // After that we can also look at the join function, which makes the enter + update + exit pattern way easier.
 }
 
 //## readonly ##
-// This dataset is globally accessible in this file
+/**
+ * The draw function is just some boilerplate function to run the assigments.
+ */
+function draw() {
+  manuallyAppendColumn();
+  dynamicallyAppendColumn();
+  const scales = positioningAndSizingUsingScales();
+  appendingAxis(scales);
+  appendingValuesAndGridLines(scales);
+}
+// This dataset is globally accessible in this file and is used in the assigments
 const dataset = [
   { label: 'maandag', value: 33 },
   { label: 'dinsdag', value: 50 },
@@ -425,12 +409,11 @@ function createSVGSVGElement(width, height, id) {
     .attr('id', id)
     .attr('class', 'my-graphic')
     .attr('width', width)
-    .attr('height', height)
-    // .attr('viewBox', [0, 0, width, height]);
+    .attr('height', height);
 
   return svgSelection;
 }
-// svgWidth and svgHeight are globally accessible in this file
+
 const svgWidth = 400, svgHeight = 400;
 createSVGSVGElement(svgWidth, svgHeight, 'd3-chart');
 draw();
