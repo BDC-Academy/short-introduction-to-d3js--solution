@@ -55,3 +55,7 @@ D3 Scales
 
 [https://observablehq.com/@d3/d3-scaleband](https://observablehq.com/@d3/d3-scaleband)
 
+
+D3 Enter + Update + Exit / Join
+
+[https://observablehq.com/@thetylerwolf/day-18-join-enter-update-exit](https://observablehq.com/@thetylerwolf/day-18-join-enter-update-exit)
